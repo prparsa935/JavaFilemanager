@@ -66,7 +66,7 @@ public class Fm1Controller implements Initializable {
                 ImageView ImageView=new ImageView();
                 ImageView.setImage(image);
                 Button B=new Button();
-                B.setText("lllll");
+                B.setText("filename");
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
                 B.setStyle("-fx-background-color: #f4f4f4; ");
@@ -74,7 +74,7 @@ public class Fm1Controller implements Initializable {
                 B.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        System.out.println("hello");
+                        System.out.println("WOW YOU HAVE BEEN CLICKED ON ME");
                     }
                 });
             }
