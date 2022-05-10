@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="pane" pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.uitest.Fm1Controller">
+   <children>
+      <Separator layoutY="23.0" prefHeight="26.0" prefWidth="600.0" />
+      <TextField fx:id="search" layoutX="470.0" layoutY="5.0" prefHeight="26.0" prefWidth="122.0" />
+      <Circle fill="TRANSPARENT" layoutX="577.0" layoutY="16.0" radius="5.0" stroke="#72707094" strokeType="INSIDE" />
+      <Line endX="178.33380126953125" endY="-214.95123291015625" layoutX="405.0" layoutY="239.0" startX="175.58477783203125" startY="-218.62745666503906" stroke="#78737394" strokeLineCap="ROUND" />
+      <BorderPane layoutX="6.900000095367432" layoutY="5.900000095367432" />
+      <Button fx:id="edit" layoutX="11.0" layoutY="4.0" mnemonicParsing="false" text="Edit" textAlignment="CENTER" />
+      <Button fx:id="del" layoutX="59.0" layoutY="4.0" mnemonicParsing="false" text="Delete" textAlignment="CENTER" />
+      <Label fx:id="fm" layoutX="249.0" layoutY="5.0" text="File Manager" textAlignment="CENTER" textFill="#909090">
+         <font>
+            <Font name="Annai MN Regular" size="14.0" />
+         </font>
+      </Label>
+      <ScrollPane fx:id="ScBar" layoutY="36.0" prefHeight="362.0" prefWidth="600.0">
+         <content>
+            <FlowPane fx:id="List" alignment="TOP_CENTER" hgap="6.0" prefHeight="359.0" prefWidth="594.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</Pane>
