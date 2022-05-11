@@ -1,5 +1,6 @@
 package com.example.uitest;
 
+import Controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,11 +17,14 @@ import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class Fm1Controller implements Initializable {
 
+    Controller controller=new Controller();
 
     @FXML
     private Button del;
@@ -57,14 +61,16 @@ public class Fm1Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         try {
+            HashMap<String,String> f=controller.scan_files(Controller.current_loc);
             InputStream stream = new FileInputStream("E:\\FinalManager\\FileManagerJAVA\\src\\main\\resources\\com\\example\\uitest\\icons8-folder-96.png");
             Image image = new Image(stream);
-            for(int i=0;i<100;i++){
+            for(Map.Entry<String, String> set:f.entrySet()){
                 ImageView ImageView=new ImageView();
                 ImageView.setImage(image);
                 Button B=new Button();
-                B.setText("filename");
+                B.setText(set.getKey());
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
                 B.setStyle("-fx-background-color: #f4f4f4; ");
@@ -73,12 +79,15 @@ public class Fm1Controller implements Initializable {
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         System.out.println("WOW YOU HAVE CLICKED ON ME");
+                        System.out.println(B.getText());
                     }
                 });
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
 
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
