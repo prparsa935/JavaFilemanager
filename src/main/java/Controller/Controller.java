@@ -33,9 +33,9 @@ public class Controller {
             for (int i = 0; i < files_here; i++) {
                 File[] f1 = new File(dirpath).listFiles();
                 if (f1[i].isDirectory())
-                    result.put(f1[i].toString(),"DIR");
+                    result.put(arr[i].toString(),"DIR");
                 else
-                    result.put(f1[i].toString(),"File");
+                    result.put(arr[i].toString(),"File");
             }
             return result;
         }

@@ -35,7 +35,7 @@
       </Label>
       <ScrollPane fx:id="ScBar" layoutY="36.0" prefHeight="362.0" prefWidth="600.0">
          <content>
-            <FlowPane fx:id="List" alignment="TOP_CENTER" hgap="6.0" prefHeight="359.0" prefWidth="594.0" />
+            <FlowPane fx:id="List" hgap="6.0" prefHeight="359.0" prefWidth="594.0" />
          </content>
       </ScrollPane>
    </children>
