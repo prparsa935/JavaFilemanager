@@ -42,13 +42,15 @@ public class Controller {
         return null;
     }
     public HashMap<String, String> open_dir(String to_open_dir)throws IOException{
-        if (current_loc.charAt(current_loc.length()-1) == '\\'){
+        if (!current_loc.equals("")&&current_loc.charAt(current_loc.length()-1) == '\\'){
+            System.out.println("here");
             current_loc = current_loc + to_open_dir;
             System.out.println(current_loc);
 
         }
 
         else{
+            System.out.println("here2");
             current_loc = current_loc + "\\" + to_open_dir;
             System.out.println(current_loc);
         }

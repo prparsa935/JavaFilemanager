@@ -48,17 +48,44 @@ public class Fm1Controller implements Initializable {
     private ScrollPane ScBar;
 
 
+//    public void show_drives() throws IOException {
+//        for (Path root : FileSystems.getDefault().getRootDirectories()) {
+//            FileStore fileStore = Files.getFileStore(root);
+//            System.out.format("%s\t%s\n", root, fileStore.getAttribute("volume:isRemovable"));
+//        }
+//    }
 
-    private String[] ll={"ss","aas"};
+    private void OpenFolder(String to_open_dir){
+        try {
+            HashMap<String,String> f=controller.open_dir(to_open_dir);
+            InputStream stream = new FileInputStream("E:\\FinalManager\\FileManagerJAVA\\src\\main\\resources\\com\\example\\uitest\\icons8-folder-96.png");
+            Image image = new Image(stream);
+            for(Map.Entry<String, String> set:f.entrySet()){
+                ImageView ImageView=new ImageView();
+                ImageView.setImage(image);
+                Button B=new Button();
+                B.setText(set.getKey());
+                B.setGraphic(ImageView);
+                List.getChildren().add(B);
+                B.setStyle("-fx-background-color: #f4f4f4; ");
+                B.setContentDisplay(ContentDisplay.TOP);
+                B.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        List.getChildren().clear();
+                        OpenFolder(B.getText());
+//                        List.getChildren().add();
+                    }
+                });
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
 
-    public void show_drives() throws IOException {
-        for (Path root : FileSystems.getDefault().getRootDirectories()) {
-            FileStore fileStore = Files.getFileStore(root);
-            System.out.format("%s\t%s\n", root, fileStore.getAttribute("volume:isRemovable"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -78,8 +105,10 @@ public class Fm1Controller implements Initializable {
                 B.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        System.out.println("WOW YOU HAVE CLICKED ON ME");
-                        System.out.println(B.getText());
+                        List.getChildren().clear();
+                        OpenFolder(B.getText());
+//                        List.getChildren().add();
+
                     }
                 });
             }
