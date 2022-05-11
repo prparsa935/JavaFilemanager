@@ -42,8 +42,6 @@ public class Fm1Controller implements Initializable {
     private FlowPane List;
     @FXML
     private ScrollPane ScBar;
-    @FXML
-    private Button Folder;
 
 
 
@@ -74,7 +72,7 @@ public class Fm1Controller implements Initializable {
                 B.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        System.out.println("WOW YOU HAVE BEEN CLICKED ON ME");
+                        System.out.println("WOW YOU HAVE CLICKED ON ME");
                     }
                 });
             }
