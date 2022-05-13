@@ -19,7 +19,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="pane" pickOnBounds="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.uitest.Fm1Controller">
+<Pane fx:id="pane" pickOnBounds="false" stylesheets="@Fm1Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.uitest.Fm1Controller">
    <children>
       <Separator layoutY="23.0" prefHeight="26.0" prefWidth="600.0" />
       <TextField fx:id="search" layoutX="470.0" layoutY="5.0" prefHeight="26.0" prefWidth="122.0" />

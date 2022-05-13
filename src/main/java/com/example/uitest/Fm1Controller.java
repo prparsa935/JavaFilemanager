@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -68,22 +69,24 @@ public class Fm1Controller implements Initializable {
                 B.setText(set.getKey());
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
-                B.setStyle("-fx-pref-width: 100px;" +
-                        "-fx-pref-height: 100px;" +
-                        "-fx-background-color: #f4f4f4;");
+//                B.setStyle("-fx-pref-width: 100px;" +
+//                        "-fx-pref-height: 100px;" +
+//                        "-fx-background-color: #f4f4f4;");
                 B.setContentDisplay(ContentDisplay.TOP);
-                B.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                B.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
+                        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                            if(mouseEvent.getClickCount()==2){
+                                List.getChildren().clear();
+                                OpenFolder(B.getText());
 
-                    }
-                });
-                B.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        List.getChildren().clear();
-                        OpenFolder(B.getText());
+                            }
+
 //                        List.getChildren().add();
+
+                        }
+
                     }
                 });
             }
