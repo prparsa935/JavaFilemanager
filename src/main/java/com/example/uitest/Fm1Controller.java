@@ -83,8 +83,6 @@ public class Fm1Controller implements Initializable {
 
                             }
 
-//                        List.getChildren().add();
-
                         }
 
                     }
@@ -112,14 +110,19 @@ public class Fm1Controller implements Initializable {
                 B.setText(set.getKey());
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
-                B.setStyle("-fx-background-color: #f4f4f4; ");
+//                B.setStyle("-fx-background-color: #f4f4f4; ");
                 B.setContentDisplay(ContentDisplay.TOP);
-                B.setOnAction(new EventHandler<ActionEvent>() {
+                B.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(ActionEvent actionEvent) {
-                        List.getChildren().clear();
-                        OpenFolder(B.getText());
-//                        List.getChildren().add();
+                    public void handle(MouseEvent mouseEvent) {
+                        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                            if(mouseEvent.getClickCount()==2){
+                                List.getChildren().clear();
+                                OpenFolder(B.getText());
+
+                            }
+
+                        }
 
                     }
                 });
