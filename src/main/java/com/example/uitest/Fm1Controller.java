@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
@@ -58,7 +59,7 @@ public class Fm1Controller implements Initializable {
     private void OpenFolder(String to_open_dir){
         try {
             HashMap<String,String> f=controller.open_dir(to_open_dir);
-            InputStream stream = new FileInputStream("E:\\FinalManager\\FileManagerJAVA\\src\\main\\resources\\com\\example\\uitest\\icons8-folder-96.png");
+            InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             Image image = new Image(stream);
             for(Map.Entry<String, String> set:f.entrySet()){
                 ImageView ImageView=new ImageView();
@@ -67,11 +68,16 @@ public class Fm1Controller implements Initializable {
                 B.setText(set.getKey());
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
-                B.setStyle("-fx-background-color: #f4f4f4; ");
                 B.setStyle("-fx-pref-width: 100px;" +
                         "-fx-pref-height: 100px;" +
                         "-fx-background-color: #f4f4f4;");
                 B.setContentDisplay(ContentDisplay.TOP);
+                B.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+
+                    }
+                });
                 B.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
@@ -94,7 +100,7 @@ public class Fm1Controller implements Initializable {
 
         try {
             HashMap<String,String> f=controller.scan_files(Controller.current_loc);
-            InputStream stream = new FileInputStream("E:\\FinalManager\\FileManagerJAVA\\src\\main\\resources\\com\\example\\uitest\\icons8-folder-96.png");
+            InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             Image image = new Image(stream);
             for(Map.Entry<String, String> set:f.entrySet()){
                 ImageView ImageView=new ImageView();
