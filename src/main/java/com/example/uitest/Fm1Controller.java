@@ -68,6 +68,9 @@ public class Fm1Controller implements Initializable {
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
                 B.setStyle("-fx-background-color: #f4f4f4; ");
+                B.setStyle("-fx-pref-width: 100px;" +
+                        "-fx-pref-height: 100px;" +
+                        "-fx-background-color: #f4f4f4;");
                 B.setContentDisplay(ContentDisplay.TOP);
                 B.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
