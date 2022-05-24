@@ -2,6 +2,7 @@ package com.example.uitest;
 
 import Controller.Controller;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -48,14 +49,9 @@ public class Fm1Controller implements Initializable {
     private FlowPane List;
     @FXML
     private ScrollPane ScBar;
+    @FXML
+    private Button BackButt;
 
-
-//    public void show_drives() throws IOException {
-//        for (Path root : FileSystems.getDefault().getRootDirectories()) {
-//            FileStore fileStore = Files.getFileStore(root);
-//            System.out.format("%s\t%s\n", root, fileStore.getAttribute("volume:isRemovable"));
-//        }
-//    }
 
     private void OpenFolder(String to_open_dir){
         try {
@@ -69,10 +65,19 @@ public class Fm1Controller implements Initializable {
                 B.setText(set.getKey());
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
-//                B.setStyle("-fx-pref-width: 100px;" +
-//                        "-fx-pref-height: 100px;" +
-//                        "-fx-background-color: #f4f4f4;");
                 B.setContentDisplay(ContentDisplay.TOP);
+//                B.getStyleClass().add("bb");
+                MenuItem copy=new MenuItem("copy");
+                final ContextMenu CM=new ContextMenu();
+                CM.getItems().add(copy);
+
+                copy.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        System.out.println(B.getText());
+                    }
+                });
+                B.setContextMenu(CM);
                 B.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
@@ -80,7 +85,6 @@ public class Fm1Controller implements Initializable {
                             if(mouseEvent.getClickCount()==2){
                                 List.getChildren().clear();
                                 OpenFolder(B.getText());
-
                             }
 
                         }
@@ -96,11 +100,10 @@ public class Fm1Controller implements Initializable {
         }
 
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
+    private void back(){
         try {
-            HashMap<String,String> f=controller.scan_files(Controller.current_loc);
+            List.getChildren().clear();
+            HashMap<String,String> f=controller.back_dir();
             InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             Image image = new Image(stream);
             for(Map.Entry<String, String> set:f.entrySet()){
@@ -110,8 +113,19 @@ public class Fm1Controller implements Initializable {
                 B.setText(set.getKey());
                 B.setGraphic(ImageView);
                 List.getChildren().add(B);
-//                B.setStyle("-fx-background-color: #f4f4f4; ");
                 B.setContentDisplay(ContentDisplay.TOP);
+//                B.getStyleClass().add("bb");
+                MenuItem copy=new MenuItem("copy");
+                final ContextMenu CM=new ContextMenu();
+                CM.getItems().add(copy);
+
+                copy.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        System.out.println(B.getText());
+                    }
+                });
+                B.setContextMenu(CM);
                 B.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
@@ -119,7 +133,6 @@ public class Fm1Controller implements Initializable {
                             if(mouseEvent.getClickCount()==2){
                                 List.getChildren().clear();
                                 OpenFolder(B.getText());
-
                             }
 
                         }
@@ -133,6 +146,51 @@ public class Fm1Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        OpenFolder(Controller.current_loc);
+        BackButt.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                back();
+            }
+        });
+
+//
+//        try {
+//            HashMap<String,String> f=controller.scan_files(Controller.current_loc);
+//            InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
+//            Image image = new Image(stream);
+//            for(Map.Entry<String, String> set:f.entrySet()){
+//                ImageView ImageView=new ImageView();
+//                ImageView.setImage(image);
+//                Button B=new Button();
+//                B.setText(set.getKey());
+//                B.setGraphic(ImageView);
+//                List.getChildren().add(B);
+////                B.setStyle("-fx-background-color: #f4f4f4; ");
+//                B.setContentDisplay(ContentDisplay.TOP);
+//                B.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//                    @Override
+//                    public void handle(MouseEvent mouseEvent) {
+//                        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+//                            if(mouseEvent.getClickCount()==2){
+//                                List.getChildren().clear();
+//                                OpenFolder(B.getText());
+//                            }
+//
+//                        }
+//
+//                    }
+//                });
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }

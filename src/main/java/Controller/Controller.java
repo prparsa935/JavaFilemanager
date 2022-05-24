@@ -20,6 +20,7 @@ public class Controller {
             File[] drives = File.listRoots();
             if (drives != null && drives.length > 0) {
                 for (File aDrive : drives) {
+                    System.out.println(aDrive.toString());
                     result.put(aDrive.toString(),"drive");
                 }
             }
@@ -53,15 +54,30 @@ public class Controller {
         }
         return scan_files(current_loc);
     }
-//    public String back_dir()throws IOException{
-//        StringBuilder current_dir = new StringBuilder(current_loc);
-//        int i = 0;
-//        //current_dir.deleteCharAt(i);
-//        for (i = current_loc.length()-1 ; current_loc.charAt(i) != '\\' ; i--){
-//            current_dir.deleteCharAt(i);
-//        }
+    public HashMap<String, String> back_dir()throws IOException{
+        StringBuilder current_dir = new StringBuilder(current_loc);
+        int i = 0;
 //        current_dir.deleteCharAt(i);
-//        current_loc = current_dir.toString();
-//        return scan_files(current_loc);
-//    }
+        if(current_loc.equals(""))
+            return scan_files(current_loc);
+        for (i = current_loc.length()-1 ; current_loc.charAt(i) != '\\' ; i--){
+            current_dir.deleteCharAt(i);
+
+        }
+        if(current_dir.length()>=4){
+            current_dir.deleteCharAt(i);
+            if(current_dir.charAt(current_dir.length()-1)==':')
+                current_loc="";
+            else
+                current_loc = current_dir.toString();
+        }
+
+//        else{
+//            current_loc="";
+//        }
+
+
+        System.out.println(current_loc);
+        return scan_files(current_loc);
+    }
 }

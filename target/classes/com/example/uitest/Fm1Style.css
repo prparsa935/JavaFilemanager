@@ -2,12 +2,14 @@
     -fx-pref-width: 100px;
     -fx-pref-height: 80px;
     -fx-background-color: #f4f4f4;
+
 }
 .scroll-pane .button:hover{
     -fx-pref-width: 100px;
     -fx-pref-height: 80px;
     /*-fx-background-color: -fx-shadow-highlight-color, #007bff;*/
     -fx-background-color: -fx-shadow-highlight-color, #c1cbd8;
+    -fx-text-overrun: hide;
 
 }
 .scroll-pane .button:focused{
@@ -16,6 +18,9 @@
     /*-fx-background-color: -fx-shadow-highlight-color, #007bff;*/
     -fx-background-color: -fx-shadow-highlight-color, #9aa4ad;
 
+}
+#BackButt{
+    -fx-background-image: url("");
 }
 
 
