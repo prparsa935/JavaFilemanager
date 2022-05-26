@@ -62,21 +62,21 @@ public class Controller {
             return scan_files(current_loc);
         for (i = current_loc.length()-1 ; current_loc.charAt(i) != '\\' ; i--){
             current_dir.deleteCharAt(i);
+        }
+        current_dir.deleteCharAt(i);
+        try{
+            if(getClass().getProtectionDomain().getCodeSource().getLocation().toString().charAt(6)==current_dir.charAt(1)){
+                current_loc=current_dir.toString();
+                return scan_files(current_dir.toString()+"\\") ;
+
+            }
 
         }
-        if(current_dir.length()>=4){
-            current_dir.deleteCharAt(i);
-            if(current_dir.charAt(current_dir.length()-1)==':')
-                current_loc="";
-            else
-                current_loc = current_dir.toString();
+        catch (Exception e){
+
         }
 
-//        else{
-//            current_loc="";
-//        }
-
-
+        current_loc=current_dir.toString();
         System.out.println(current_loc);
         return scan_files(current_loc);
     }
