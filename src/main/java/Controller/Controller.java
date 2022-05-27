@@ -57,16 +57,33 @@ public class Controller {
     public HashMap<String, String> back_dir()throws IOException{
         StringBuilder current_dir = new StringBuilder(current_loc);
         int i = 0;
+        boolean deleted=false;
 //        current_dir.deleteCharAt(i);
-        if(current_loc.equals(""))
+        if(current_loc.equals("")){
+            System.out.println(current_loc);
             return scan_files(current_loc);
+        }
+
         for (i = current_loc.length()-1 ; current_loc.charAt(i) != '\\' ; i--){
+            deleted=true;
             current_dir.deleteCharAt(i);
         }
         current_dir.deleteCharAt(i);
+        try {
+            if(current_dir.toString().charAt(current_dir.length()-1)==':'&&!deleted){
+                current_loc="";
+                System.out.println(current_loc);
+                return scan_files(current_loc);
+            }
+
+        }catch (Exception e){
+
+        }
+
         try{
             if(getClass().getProtectionDomain().getCodeSource().getLocation().toString().charAt(6)==current_dir.charAt(1)){
                 current_loc=current_dir.toString();
+                System.out.println(current_loc);
                 return scan_files(current_dir.toString()+"\\") ;
 
             }
@@ -75,7 +92,6 @@ public class Controller {
         catch (Exception e){
 
         }
-
         current_loc=current_dir.toString();
         System.out.println(current_loc);
         return scan_files(current_loc);

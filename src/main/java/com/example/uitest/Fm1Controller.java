@@ -94,10 +94,10 @@ public class Fm1Controller implements Initializable {
     private void OpenFolder(String to_open_dir){
         try {
             HashMap<String,String> f=controller.open_dir(to_open_dir);
-            InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
-            Image image = new Image(stream);
+            InputStream FolderStream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
+            Image Folderimage = new Image(FolderStream);
             for(Map.Entry<String, String> set:f.entrySet()){
-                SetIcon(image,set);
+                SetIcon(Folderimage,set);
 
             }
         } catch (FileNotFoundException e) {
@@ -142,7 +142,6 @@ public class Fm1Controller implements Initializable {
                                 List.getChildren().clear();
                                 OpenFolder(B.getText());
                             }
-
                         }
                     }
                 });
