@@ -1,5 +1,8 @@
 package com.example.uitest;
 
+import javafx.scene.control.Label;
+import usermodel.userent.UserEnt;
+import usermodel.userservice.UserService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,6 +29,8 @@ public class LoginpController implements Initializable {
 
     @FXML
     private Button done;
+    @FXML
+    private Label error;
 
     @FXML
     private TextField email;
@@ -53,23 +58,67 @@ public class LoginpController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            UserService.getInstance().setup();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            UserEnt userEnt=new UserEnt().setId(0L).setUsername("username").setPassword("password").setEmail("user@gmail.com").setName("user");
+            UserService.getInstance().save(userEnt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        error.setVisible(false);
         done.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Parent root;
+
+
+                UserEnt user=null;
                 try {
-                    root = FXMLLoader.load(getClass().getResource("Fm1.fxml"));
-//                    mainpane.getChildren().setAll(root);
-                    Stage stage = new Stage();
-                    stage.setTitle("File Manager");
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                    // Hide this current window (if this is what you want)
-                    ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
-                }
-                catch (IOException e) {
+                    user=UserService.getInstance().authenticate(username.getText(),password.getText());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+                if(!username.getText().equals("")&&!password.getText().equals("")){
+                    if(user!=null){
+                        Parent root;
+                        try {
+                            root = FXMLLoader.load(getClass().getResource("Fm1.fxml"));
+                            //                    mainpane.getChildren().setAll(root);
+                            Stage stage = new Stage();
+                            stage.setTitle("File Manager");
+                            stage.setScene(new Scene(root));
+                            stage.show();
+                            // Hide this current window (if this is what you want)
+                            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                    else{
+                        username.setText("");
+                        email.setText("");
+                        password.setText("");
+                        error.setText("Incorrect username or password!\n" +
+                                " please try again");
+                        error.setVisible(true);
+                    }
+
+
+                }
+                else{
+                    error.setText("       please fill the form first");
+                    error.setVisible(true);
+                }
+
+
+
 
             }
         });
