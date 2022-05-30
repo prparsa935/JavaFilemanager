@@ -82,12 +82,13 @@ public class Fm1Controller implements Initializable {
                         List.getChildren().clear();
                         OpenFolder(B.getText());
                     }
-
                 }
-
             }
         });
 
+    }
+    private String getfileformat(String filename){
+        return filename.substring(filename.lastIndexOf('.')+1,filename.length());
     }
 
 
@@ -95,10 +96,49 @@ public class Fm1Controller implements Initializable {
         try {
             HashMap<String,String> f=controller.open_dir(to_open_dir);
             InputStream FolderStream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
-            Image Folderimage = new Image(FolderStream);
-            for(Map.Entry<String, String> set:f.entrySet()){
-                SetIcon(Folderimage,set);
+            InputStream pictureStream = new FileInputStream(getClass().getResource("icons8-gallery-96.png").getPath());
+            InputStream videoStream = new FileInputStream(getClass().getResource("icons8-video-96.png").getPath());
+            InputStream appStream = new FileInputStream(getClass().getResource("icons8-application-window-96.png").getPath());
+            InputStream pdfStream = new FileInputStream(getClass().getResource("icons8-pdf-80.png").getPath());
+            InputStream fileStream = new FileInputStream(getClass().getResource("icons8-file-64.png").getPath());
 
+            Image Folderimage = new Image(FolderStream);
+            Image pictureimage = new Image(pictureStream);
+            Image videoimage = new Image(videoStream);
+            Image appimage = new Image(appStream);
+            Image pdfimage = new Image(pdfStream);
+            Image fileimage = new Image(fileStream);
+            for(Map.Entry<String, String> set:f.entrySet()){
+                String fileformat = "";
+                try {
+                    fileformat=getfileformat(set.getKey()).toLowerCase();
+
+                }
+                catch (Exception e){
+
+
+                }
+
+                if (set.getValue().equals("DIR")||set.getValue().equals("drive")){
+                    SetIcon(Folderimage,set);
+
+                }
+                else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
+                    SetIcon(pictureimage,set);
+
+                }
+                else if(fileformat.equals("exe")||fileformat.equals("bat")){
+                    SetIcon(appimage,set);
+                }
+                else if(fileformat.equals("mp4")||fileformat.equals("mov")||fileformat.equals("wmv")||fileformat.equals("avi")){
+                    SetIcon(videoimage,set);
+                }
+                else if(fileformat.equals("pdf")){
+                    SetIcon(pdfimage,set);
+                }
+                else{
+                    SetIcon(fileimage,set);
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

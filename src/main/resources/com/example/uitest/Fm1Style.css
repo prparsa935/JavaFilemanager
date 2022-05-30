@@ -1,4 +1,7 @@
 .scroll-pane .button{
+
+    min-width:800px ;
+    min-height:160px ;
     -fx-pref-width: 100px;
     -fx-pref-height: 80px;
     -fx-background-color: #f4f4f4;
