@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+//import java.awt.*;
 
 public class Controller {
     public static String current_loc = "";
@@ -96,4 +97,39 @@ public class Controller {
         System.out.println(current_loc);
         return scan_files(current_loc);
     }
+    public void renamefile(String oldfilepth,String newfilename){
+        File oldfile=new File(oldfilepth);
+        int lastoccuranceofbackslash=oldfile.getPath().lastIndexOf("\\");
+        int lastoccuranceofdot;
+        File newfile;
+        if(oldfile.isFile()){
+            lastoccuranceofdot=oldfile.getPath().lastIndexOf(".");
+
+            String oldfilename=oldfile.getAbsolutePath().substring(lastoccuranceofbackslash+1,lastoccuranceofdot);
+            newfile=new File(oldfile.getPath().replace(oldfilename,newfilename));
+        }
+        else{
+
+            String oldfilename=oldfile.getAbsolutePath().substring(lastoccuranceofbackslash+1);
+            newfile=new File(oldfile.getPath().replace(oldfilename,newfilename));
+
+        }
+
+
+        if(oldfile.exists()){
+            oldfile.renameTo(newfile);
+        }else{
+            System.out.println("File dosent exist");
+        }
+    }
+//    public void runfile(String path){
+//        File file=new File(path);
+//        if(file.exists()){
+//            try {
+//                Desktop.getDesktop().open(file);
+//            } catch (IOException e){
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

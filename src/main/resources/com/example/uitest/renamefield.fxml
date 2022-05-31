@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="318.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.uitest.RenamefieldController">
+   <children>
+      <Label layoutX="14.0" layoutY="22.0" text="RENAME:" />
+      <TextField fx:id="newnamefield" layoutX="68.0" layoutY="18.0" prefHeight="25.0" prefWidth="199.0" />
+      <Button fx:id="save" layoutX="273.0" layoutY="18.0" mnemonicParsing="false" text="save" />
+   </children>
+</AnchorPane>
