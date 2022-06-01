@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-//import java.awt.*;
+import java.awt.*;
 
 public class Controller {
     public static String current_loc = "";
@@ -122,14 +122,14 @@ public class Controller {
             System.out.println("File dosent exist");
         }
     }
-//    public void runfile(String path){
-//        File file=new File(path);
-//        if(file.exists()){
-//            try {
-//                Desktop.getDesktop().open(file);
-//            } catch (IOException e){
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public void runfile(String path){
+        File file=new File(path);
+        if(file.exists()){
+            try {
+                Desktop.getDesktop().open(file);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
 }

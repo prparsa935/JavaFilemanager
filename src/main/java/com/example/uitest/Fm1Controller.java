@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
@@ -45,6 +46,7 @@ public class Fm1Controller implements Initializable {
     Image appimage;
     Image pdfimage;
     Image fileimage ;
+    ContextMenu MainContextMenu;
     @FXML
     private Button del;
 
@@ -143,10 +145,11 @@ public class Fm1Controller implements Initializable {
         B.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                MainContextMenu.hide();
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                     if(mouseEvent.getClickCount()==2){
                         if(set.getValue().equals("File")){
-
+                            controller.runfile(Controller.current_loc+"\\"+B.getText());
 
                         }
                         else{
@@ -273,14 +276,40 @@ public class Fm1Controller implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         OpenFolder(Controller.current_loc);
+        // Create the context menu items
+        MenuItem createfolder = new MenuItem("Create Folder");
+        createfolder.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("click");
+            }
+        });
+
+
+        // Create a context (i.e., popup) menu that shows edit options.
+        MainContextMenu = new ContextMenu(createfolder);
+        pane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent contextMenuEvent) {
+                MainContextMenu.show(pane, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+
+            }
+        });
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                MainContextMenu.hide();
+            }
+        });
+
         BackButt.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 back();
             }
         });
+
 
 //
 //        try {
