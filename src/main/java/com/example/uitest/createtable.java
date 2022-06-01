@@ -1,24 +1,34 @@
 package com.example.uitest;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.apache.commons.io.FileUtils;
+
+
 
 public class createtable{
     public static void main(String args[]) throws SQLException {
-        Scanner Sc=new Scanner(System.in);
-
-        if(Sc.next().equals("g")){
-            File file=new File("D:\\Games\\Dark Souls Remastered\\sound");
-            for(Object o:file.list()){
-                System.out.println(o);
-            }
-
+        try {
+            FileUtils.deleteDirectory(new File("F:\\folder"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+//        Scanner Sc=new Scanner(System.in);
+//
+//        if(Sc.next().equals("g")){
+//            File file=new File("D:\\Games\\Dark Souls Remastered\\sound");
+//            for(Object o:file.list()){
+//                System.out.println(o);
+//            }
+//
+//        }
+
 
 //        //Registering the Driver
 //        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());

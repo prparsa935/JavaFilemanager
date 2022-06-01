@@ -27,6 +27,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
@@ -82,8 +83,28 @@ public class Fm1Controller implements Initializable {
         B.setContentDisplay(ContentDisplay.TOP);
 //                B.getStyleClass().add("bb");
         MenuItem rename=new MenuItem("rename");
+        MenuItem delete=new MenuItem("delete");
         final ContextMenu CM=new ContextMenu();
-        CM.getItems().add(rename);
+        CM.getItems().addAll(rename,delete);
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(set.getValue().equals("DIR")){
+                    controller.deleteDir(Controller.current_loc+"\\"+set.getKey());
+                    List.getChildren().remove(B);
+
+
+                }
+
+                else if(set.getValue().equals("File")){
+                    controller.deletefile(Controller.current_loc+"\\"+set.getKey());
+                    List.getChildren().remove(B);
+
+                }
+
+
+            }
+        });
 
         rename.setOnAction(new EventHandler<ActionEvent>() {
             @Override

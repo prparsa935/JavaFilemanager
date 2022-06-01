@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.*;
+import org.apache.commons.io.FileUtils;
 
 public class Controller {
     public static String current_loc = "";
@@ -131,5 +132,18 @@ public class Controller {
                 e.printStackTrace();
             }
         }
+    }
+    public void deleteDir(String path){
+        try {
+            FileUtils.deleteDirectory(new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void deletefile(String path){
+        File file=new File(path);
+        file.delete();
+
+
     }
 }

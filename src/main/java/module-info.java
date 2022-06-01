@@ -4,6 +4,7 @@ module com.example.uitest {
     requires java.sql;
     requires ojdbc6;
     requires java.desktop;
+    requires org.apache.commons.io;
 
 
     opens com.example.uitest to javafx.fxml;
