@@ -14,6 +14,14 @@ public class Fileserv {
     public static Fileserv getInstance () {
         return usersserv;
     }
+    public  void createtable() throws Exception {
+        try (Filerepo filerepo=new Filerepo()) {
+            filerepo.createtable();
+            filerepo.commit ();
+        }
+
+
+    }
 
     public void save (Fileenti fileenti) throws Exception {
         try (Filerepo filerepo=new Filerepo()) {
@@ -34,13 +42,21 @@ public class Fileserv {
             filerepo.commit();
         }
     }
-    public List<Fileenti> report() throws Exception{
-        List<Fileenti> UserEntites;
+    public List<Fileenti> search(String name) throws Exception{
+        List<Fileenti> Fileenti;
         try (Filerepo filerepo=new Filerepo()){
-            UserEntites=filerepo.select();
+            Fileenti=filerepo.search(name);
         }
-        return UserEntites;
+        return Fileenti;
     }
+    public List<Fileenti> open_Folder(Fileenti Folder) throws Exception{
+        List<Fileenti> Fileenti;
+        try (Filerepo filerepo=new Filerepo()){
+            Fileenti=filerepo.open_folder(Folder);
+        }
+        return Fileenti;
+    }
+
 
 }
 

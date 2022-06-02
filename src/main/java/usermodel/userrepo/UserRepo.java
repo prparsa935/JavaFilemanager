@@ -21,7 +21,6 @@ public class UserRepo implements AutoCloseable{
         preparedStatement=connection.prepareStatement ("create table filemanageruser(id integer ,name varchar(45),username varchar(45) ,password varchar(45),email varchar(45))");
         preparedStatement.executeUpdate();
 
-
     }
 
     public void insert(UserEnt usersenti) throws Exception{
@@ -31,7 +30,6 @@ public class UserRepo implements AutoCloseable{
         preparedStatement.setString (3,usersenti.getUsername());
         preparedStatement.setString (4,usersenti.getPassword());
         preparedStatement.setString (5,usersenti.getEmail());
-
         preparedStatement.executeUpdate ();
     }
 

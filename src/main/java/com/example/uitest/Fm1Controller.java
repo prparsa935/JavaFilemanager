@@ -1,6 +1,8 @@
 package com.example.uitest;
 
 import Controller.Controller;
+import filemodel.fileentity.Fileenti;
+import filemodel.fileservice.Fileserv;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -33,6 +35,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class Fm1Controller implements Initializable {
+    Fileserv fileserv;
+    Fileenti current_file;
+
 
     Controller controller=new Controller();
     InputStream FolderStream;
@@ -70,14 +75,12 @@ public class Fm1Controller implements Initializable {
     private ScrollPane ScBar;
     @FXML
     private Button BackButt;
-    private void SetIcon(Image image,Map.Entry<String, String> set){
-        if(set.getValue().equals("DIR")){
-
-        }
+    private void SetIcon(Image image,Fileenti file){
+        String fileformat=file.getFormat();
         ImageView ImageView=new ImageView();
         ImageView.setImage(image);
         Button B=new Button();
-        B.setText(set.getKey());
+        B.setText(file.getName());
         B.setGraphic(ImageView);
         List.getChildren().add(B);
         B.setContentDisplay(ContentDisplay.TOP);
@@ -89,15 +92,15 @@ public class Fm1Controller implements Initializable {
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(set.getValue().equals("DIR")){
-                    controller.deleteDir(Controller.current_loc+"\\"+set.getKey());
+                if(fileformat==null){
+                    controller.deleteDir(Controller.current_loc+"\\"+file.getName());
                     List.getChildren().remove(B);
 
 
                 }
 
-                else if(set.getValue().equals("File")){
-                    controller.deletefile(Controller.current_loc+"\\"+set.getKey());
+                else if(fileformat!=null&&!fileformat.equals("Drive")){
+                    controller.deletefile(Controller.current_loc+"\\"+file.getName());
                     List.getChildren().remove(B);
 
                 }
@@ -115,9 +118,9 @@ public class Fm1Controller implements Initializable {
                     root = Fxmlloader.load();
                     RenamefieldController renameC= Fxmlloader.getController();
                     String presentname=B.getText();
-                    if(set.getValue().equals("File"))
+                    if(fileformat!=null&&!fileformat.equals("Drive"))
                         renameC.getNewnamefield().setText(presentname.substring(0,presentname.lastIndexOf('.')));
-                    else if(set.getValue().equals("DIR")){
+                    else if(fileformat==null){
                         renameC.getNewnamefield().setText(presentname);
                     }
 
@@ -134,16 +137,22 @@ public class Fm1Controller implements Initializable {
                             String lastname=B.getText();
                             System.out.println(lastname);
                             if(!newfilename.equals("")){
-                                controller.renamefile(Controller.current_loc+"\\"+lastname,newfilename);
-                                if(set.getValue().equals("File")){
+                                file.setName(newfilename);
+                                try {
+                                    fileserv.edit(file);
+                                    controller.renamefile(Controller.current_loc+"\\"+lastname,newfilename);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                if(fileformat!=null&&!fileformat.equals("Drive")){
                                     System.out.println(Controller.current_loc);
-                                    B.setText(renameC.getNewnamefield().getText()+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
+                                    B.setText(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
 
                                 }
 
-                                else if(set.getValue().equals("DIR")){
-                                    System.out.println("here");
-                                    B.setText(renameC.getNewnamefield().getText());
+                                else if(fileformat==null){
+                                    B.setText(newfilename);
 
                                 }
                             }
@@ -169,13 +178,14 @@ public class Fm1Controller implements Initializable {
                 MainContextMenu.hide();
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                     if(mouseEvent.getClickCount()==2){
-                        if(set.getValue().equals("File")){
+                        if(fileformat!=null&&!fileformat.equals("Drive")){
                             controller.runfile(Controller.current_loc+"\\"+B.getText());
 
                         }
                         else{
                             List.getChildren().clear();
-                            OpenFolder(B.getText());
+                            OpenFolder(file);
+                            current_file=file;
                         }
 
                     }
@@ -185,18 +195,24 @@ public class Fm1Controller implements Initializable {
 
     }
     private String getfileformat(String filename){
-        return filename.substring(filename.lastIndexOf('.')+1,filename.length());
+        try {
+            return filename.substring(filename.lastIndexOf('.')+1,filename.length());
+        }catch (Exception e){
+
+        }
+        return null;
+
     }
 
 
-    private void OpenFolder(String to_open_dir){
+    private void OpenFolder(Fileenti folder){
         try {
-            HashMap<String,String> f=controller.open_dir(to_open_dir);
-
-            for(Map.Entry<String, String> set:f.entrySet()){
+            List<Fileenti>files=fileserv.open_Folder(folder);
+//            HashMap<String,String> f=controller.open_dir(folder.getPath());
+            for(Fileenti file :files){
                 String fileformat = "";
                 try {
-                    fileformat=getfileformat(set.getKey()).toLowerCase();
+                    fileformat=file.getFormat();
 
                 }
                 catch (Exception e){
@@ -204,31 +220,33 @@ public class Fm1Controller implements Initializable {
 
                 }
 
-                if (set.getValue().equals("DIR")||set.getValue().equals("drive")){
-                    SetIcon(Folderimage,set);
+                if (file.getFormat().equals(null)){
+                    SetIcon(Folderimage,file);
 
                 }
                 else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
-                    SetIcon(pictureimage,set);
+                    SetIcon(pictureimage,file);
 
                 }
                 else if(fileformat.equals("exe")||fileformat.equals("bat")){
-                    SetIcon(appimage,set);
+                    SetIcon(appimage,file);
                 }
                 else if(fileformat.equals("mp4")||fileformat.equals("mov")||fileformat.equals("wmv")||fileformat.equals("avi")){
-                    SetIcon(videoimage,set);
+                    SetIcon(videoimage,file);
                 }
                 else if(fileformat.equals("pdf")){
-                    SetIcon(pdfimage,set);
+                    SetIcon(pdfimage,file);
                 }
                 else{
-                    SetIcon(fileimage,set);
+                    SetIcon(fileimage,file);
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -236,13 +254,14 @@ public class Fm1Controller implements Initializable {
     private void back(){
         try {
             List.getChildren().clear();
-            HashMap<String,String> f=controller.back_dir();
+            List<Fileenti>files=fileserv.open_Folder(current_file);
+//            HashMap<String,String> f=controller.back_dir();
             InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             Image image = new Image(stream);
-            for(Map.Entry<String, String> set:f.entrySet()){
+            for(Fileenti file:files){
                 String fileformat = "";
                 try {
-                    fileformat=getfileformat(set.getKey()).toLowerCase();
+                    fileformat=fileformat;
 
                 }
                 catch (Exception e){
@@ -250,25 +269,25 @@ public class Fm1Controller implements Initializable {
 
                 }
 
-                if (set.getValue().equals("DIR")||set.getValue().equals("drive")){
-                    SetIcon(Folderimage,set);
+                if (fileformat==null||fileformat.equals("Drive")){
+                    SetIcon(Folderimage,file);
 
                 }
                 else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
-                    SetIcon(pictureimage,set);
+                    SetIcon(pictureimage,file);
 
                 }
                 else if(fileformat.equals("exe")||fileformat.equals("bat")){
-                    SetIcon(appimage,set);
+                    SetIcon(appimage,file);
                 }
                 else if(fileformat.equals("mp4")||fileformat.equals("mov")||fileformat.equals("wmv")||fileformat.equals("avi")){
-                    SetIcon(videoimage,set);
+                    SetIcon(videoimage,file);
                 }
                 else if(fileformat.equals("pdf")){
-                    SetIcon(pdfimage,set);
+                    SetIcon(pdfimage,file);
                 }
                 else{
-                    SetIcon(fileimage,set);
+                    SetIcon(fileimage,file);
                 }
 
             }
@@ -277,11 +296,14 @@ public class Fm1Controller implements Initializable {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            fileserv=Fileserv.getInstance();
             FolderStream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             pictureStream = new FileInputStream(getClass().getResource("icons8-gallery-96.png").getPath());
             videoStream = new FileInputStream(getClass().getResource("icons8-video-96.png").getPath());
@@ -297,7 +319,7 @@ public class Fm1Controller implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        OpenFolder(Controller.current_loc);
+        OpenFolder(current_file);
         // Create the context menu items
         MenuItem createfolder = new MenuItem("Create Folder");
         createfolder.setOnAction(new EventHandler<ActionEvent>() {

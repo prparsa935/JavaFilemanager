@@ -4,8 +4,17 @@ import java.sql.Date;
 
 public class Fileenti {
     private String name;
+    private String format;
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
     private String path;
-    private double size;
     private Date lastdatemodified;
     private Date datecreated;
     private long id;
@@ -33,14 +42,6 @@ public class Fileenti {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public double getSize() {
-        return size;
-    }
-
-    public void setSize(double size) {
-        this.size = size;
     }
 
     public Date getLastdatemodified() {
