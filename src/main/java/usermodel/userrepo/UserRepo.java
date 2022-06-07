@@ -13,8 +13,8 @@ public class UserRepo implements AutoCloseable{
     private PreparedStatement preparedStatement;
 
     public UserRepo() throws Exception{
-        Class.forName ("oracle.jdbc.driver.OracleDriver");
-        connection= DriverManager.getConnection ("jdbc:oracle:thin:@localhost:1521:xe", "system", "university");
+//        Class.forName ("oracle.jdbc.driver.OracleDriver");
+        connection= DriverManager.getConnection ("jdbc:sqlite:Filemanager.sqlite");
         connection.setAutoCommit (false);
     }
     public void createtabel() throws SQLException {
@@ -22,6 +22,7 @@ public class UserRepo implements AutoCloseable{
         preparedStatement.executeUpdate();
 
     }
+
 
     public void insert(UserEnt usersenti) throws Exception{
         preparedStatement=connection.prepareStatement ("INSERT INTO filemanageruser(id,name ,username ,password ,email) VALUES (?,?,?,?,?)");

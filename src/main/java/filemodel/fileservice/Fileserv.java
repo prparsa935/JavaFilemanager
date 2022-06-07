@@ -49,10 +49,31 @@ public class Fileserv {
         }
         return Fileenti;
     }
-    public List<Fileenti> open_Folder(Fileenti Folder) throws Exception{
+    public List<Fileenti> open_Folder(Long id) throws Exception{
         List<Fileenti> Fileenti;
         try (Filerepo filerepo=new Filerepo()){
-            Fileenti=filerepo.open_folder(Folder);
+            Fileenti=filerepo.open_folder(id);
+        }
+        return Fileenti;
+    }
+    public Fileenti open_Folder_path(String path) throws Exception{
+        Fileenti Fileenti;
+        try (Filerepo filerepo=new Filerepo()){
+            Fileenti=filerepo.open_folder_path(path);
+        }
+        return Fileenti;
+    }
+    public Fileenti open_Folder_id(Long id) throws Exception{
+        Fileenti Fileenti;
+        try (Filerepo filerepo=new Filerepo()){
+            Fileenti=filerepo.open_folder_id(id);
+        }
+        return Fileenti;
+    }
+    public List<Fileenti> Getdrives() throws Exception{
+        List<Fileenti> Fileenti;
+        try (Filerepo filerepo=new Filerepo()){
+            Fileenti=filerepo.Getdrives();
         }
         return Fileenti;
     }

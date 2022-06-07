@@ -85,100 +85,98 @@ public class Fm1Controller implements Initializable {
         List.getChildren().add(B);
         B.setContentDisplay(ContentDisplay.TOP);
 //                B.getStyleClass().add("bb");
-        MenuItem rename=new MenuItem("rename");
-        MenuItem delete=new MenuItem("delete");
-        final ContextMenu CM=new ContextMenu();
-        CM.getItems().addAll(rename,delete);
-        delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if(fileformat==null){
-                    controller.deleteDir(Controller.current_loc+"\\"+file.getName());
-                    List.getChildren().remove(B);
-
-
-                }
-
-                else if(fileformat!=null&&!fileformat.equals("Drive")){
-                    controller.deletefile(Controller.current_loc+"\\"+file.getName());
-                    List.getChildren().remove(B);
-
-                }
-
-
-            }
-        });
-
-        rename.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    Parent root;
-                    FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("renamefield.fxml"));
-                    root = Fxmlloader.load();
-                    RenamefieldController renameC= Fxmlloader.getController();
-                    String presentname=B.getText();
-                    if(fileformat!=null&&!fileformat.equals("Drive"))
-                        renameC.getNewnamefield().setText(presentname.substring(0,presentname.lastIndexOf('.')));
-                    else if(fileformat==null){
-                        renameC.getNewnamefield().setText(presentname);
+        if(!fileformat.equals("Drive")){
+            MenuItem rename=new MenuItem("rename");
+            MenuItem delete=new MenuItem("delete");
+            final ContextMenu CM=new ContextMenu();
+            CM.getItems().addAll(rename,delete);
+            delete.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    if(fileformat==""){
+                        controller.deleteDir(Controller.current_loc+"\\"+file.getName());
+                        List.getChildren().remove(B);
                     }
+                    else if(fileformat.equals("")&&!fileformat.equals("Drive")){
+                        controller.deletefile(Controller.current_loc+"\\"+file.getName());
+                        List.getChildren().remove(B);
 
-                    //                    mainpane.getChildren().setAll(root);
-                    Stage stage = new Stage();
-                    stage.setTitle("rename");
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                    renameC.getSave().setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-                            String newfilename=renameC.getNewnamefield().getText();
-                            System.out.println(newfilename);
-                            String lastname=B.getText();
-                            System.out.println(lastname);
-                            if(!newfilename.equals("")){
-                                file.setName(newfilename);
-                                try {
-                                    fileserv.edit(file);
-                                    controller.renamefile(Controller.current_loc+"\\"+lastname,newfilename);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                    }
+                }
+            });
 
-                                if(fileformat!=null&&!fileformat.equals("Drive")){
-                                    System.out.println(Controller.current_loc);
-                                    B.setText(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
-
-                                }
-
-                                else if(fileformat==null){
-                                    B.setText(newfilename);
-
-                                }
-                            }
-
+            rename.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    try {
+                        Parent root;
+                        FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("renamefield.fxml"));
+                        root = Fxmlloader.load();
+                        RenamefieldController renameC= Fxmlloader.getController();
+                        String presentname=B.getText();
+                        if(!fileformat.equals("")&&!fileformat.equals("Drive"))
+                            renameC.getNewnamefield().setText(presentname.substring(0,presentname.lastIndexOf('.')));
+                        else if(fileformat.equals("")){
+                            renameC.getNewnamefield().setText(presentname);
                         }
-                    });
+
+                        //                    mainpane.getChildren().setAll(root);
+                        Stage stage = new Stage();
+                        stage.setTitle("rename");
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                        renameC.getSave().setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+                                String newfilename=renameC.getNewnamefield().getText();
+                                System.out.println(newfilename);
+                                String lastname=B.getText();
+                                System.out.println(lastname);
+                                if(!newfilename.equals("")){
+                                    file.setName(newfilename);
+                                    try {
+                                        fileserv.edit(file);
+                                        controller.renamefile(Controller.current_loc+"\\"+lastname,newfilename);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if(!fileformat.equals("")&&!fileformat.equals("Drive")){
+                                        System.out.println(Controller.current_loc);
+                                        B.setText(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
+
+                                    }
+
+                                    else if(fileformat.equals("")){
+                                        B.setText(newfilename);
+
+                                    }
+                                }
+
+                            }
+                        });
 
 
 
 
-                    // Hide this current window (if this is what you want)
-//                    ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                        // Hide this current window (if this is what you want)
+    //                    ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        B.setContextMenu(CM);
+            });
+            B.setContextMenu(CM);
+        }
+
         B.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 MainContextMenu.hide();
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                     if(mouseEvent.getClickCount()==2){
-                        if(fileformat!=null&&!fileformat.equals("Drive")){
+                        if(!fileformat.equals("")&&!fileformat.equals("Drive")){
                             controller.runfile(Controller.current_loc+"\\"+B.getText());
 
                         }
@@ -207,7 +205,7 @@ public class Fm1Controller implements Initializable {
 
     private void OpenFolder(Fileenti folder){
         try {
-            List<Fileenti>files=fileserv.open_Folder(folder);
+            List<Fileenti>files=fileserv.open_Folder(folder.getId());
 //            HashMap<String,String> f=controller.open_dir(folder.getPath());
             for(Fileenti file :files){
                 String fileformat = "";
@@ -220,7 +218,7 @@ public class Fm1Controller implements Initializable {
 
                 }
 
-                if (file.getFormat().equals(null)){
+                if (file.getFormat().equals("")||fileformat.equals("Drive")){
                     SetIcon(Folderimage,file);
 
                 }
@@ -254,41 +252,47 @@ public class Fm1Controller implements Initializable {
     private void back(){
         try {
             List.getChildren().clear();
-            List<Fileenti>files=fileserv.open_Folder(current_file);
+            if(current_file.getIn_Folder()!=-1){
+                List<Fileenti>files=fileserv.open_Folder(current_file.getIn_Folder());
 //            HashMap<String,String> f=controller.back_dir();
-            InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
-            Image image = new Image(stream);
-            for(Fileenti file:files){
-                String fileformat = "";
-                try {
-                    fileformat=fileformat;
+                InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
+                Image image = new Image(stream);
+                for(Fileenti file:files){
+                    String fileformat = "";
+                    try {
+                        fileformat=file.getFormat();
 
-                }
-                catch (Exception e){
+                    }
+                    catch (Exception e){
 
 
-                }
+                    }
 
-                if (fileformat==null||fileformat.equals("Drive")){
-                    SetIcon(Folderimage,file);
+                    if (fileformat.equals("")||fileformat.equals("Drive")){
+                        SetIcon(Folderimage,file);
 
-                }
-                else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
-                    SetIcon(pictureimage,file);
 
-                }
-                else if(fileformat.equals("exe")||fileformat.equals("bat")){
-                    SetIcon(appimage,file);
-                }
-                else if(fileformat.equals("mp4")||fileformat.equals("mov")||fileformat.equals("wmv")||fileformat.equals("avi")){
-                    SetIcon(videoimage,file);
-                }
-                else if(fileformat.equals("pdf")){
-                    SetIcon(pdfimage,file);
-                }
-                else{
-                    SetIcon(fileimage,file);
-                }
+                    }
+                    else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
+                        SetIcon(pictureimage,file);
+
+                    }
+                    else if(fileformat.equals("exe")||fileformat.equals("bat")){
+                        SetIcon(appimage,file);
+                    }
+                    else if(fileformat.equals("mp4")||fileformat.equals("mov")||fileformat.equals("wmv")||fileformat.equals("avi")){
+                        SetIcon(videoimage,file);
+                    }
+                    else if(fileformat.equals("pdf")){
+                        SetIcon(pdfimage,file);
+                    }
+                    else{
+                        SetIcon(fileimage,file);
+                    }
+                    current_file=fileserv.open_Folder_id(current_file.getIn_Folder());
+
+            }
+
 
             }
         } catch (FileNotFoundException e) {
@@ -302,8 +306,13 @@ public class Fm1Controller implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         try {
             fileserv=Fileserv.getInstance();
+            current_file=new Fileenti();
+            current_file.setId(0);
+            current_file.setFormat("root");
+
             FolderStream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             pictureStream = new FileInputStream(getClass().getResource("icons8-gallery-96.png").getPath());
             videoStream = new FileInputStream(getClass().getResource("icons8-video-96.png").getPath());
@@ -317,6 +326,8 @@ public class Fm1Controller implements Initializable {
             pdfimage = new Image(pdfStream);
             fileimage = new Image(fileStream);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         OpenFolder(current_file);
