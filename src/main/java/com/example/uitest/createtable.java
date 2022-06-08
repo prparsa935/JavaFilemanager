@@ -52,7 +52,7 @@ public class createtable{
         fileenti.setName(filename);
         fileenti.setPath(fileent.getPath());
         if(fileent.isFile())
-            fileenti.setFormat(filename.substring(filename.lastIndexOf('.'),filename.length()-1));
+            fileenti.setFormat(filename.substring(filename.lastIndexOf('.')+1,filename.length()));
         else{
 
         }

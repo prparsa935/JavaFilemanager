@@ -148,4 +148,14 @@ public class Controller {
 
 
     }
+    public void createfile(String path) throws IOException {
+        File file=new File(path);
+        file.createNewFile();
+
+    }
+    public void createfolder(String path) throws IOException {
+        File file=new File(path);
+        file.mkdir();
+
+    }
 }

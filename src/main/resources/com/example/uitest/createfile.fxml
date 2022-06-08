@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:controller="com.example.uitest.CreatefileController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="93.0" prefWidth="377.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1 ">
+   <children>
+      <TextField layoutX="40.0" layoutY="41.0" prefHeight="25.0" prefWidth="249.0" fx:id="NameFiled" />
+      <Button layoutX="295.0" layoutY="41.0" mnemonicParsing="false" text="Enter" fx:id="CreateFileButt" />
+   </children>
+</Pane>

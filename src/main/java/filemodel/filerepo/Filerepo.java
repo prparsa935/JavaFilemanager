@@ -39,7 +39,7 @@ import java.util.List;
         }
 
         public void delete(Fileenti fileenti) throws Exception{
-            preparedStatement=connection.prepareStatement ("DELETE * FROM  files WHERE id=?");
+            preparedStatement=connection.prepareStatement ("DELETE FROM  files WHERE id=?");
             preparedStatement.setLong (1,fileenti.getId());
             preparedStatement.executeUpdate ();
         }

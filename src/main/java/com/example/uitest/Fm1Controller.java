@@ -22,12 +22,15 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +39,7 @@ import java.util.stream.Stream;
 
 public class Fm1Controller implements Initializable {
     Fileserv fileserv;
-    Fileenti current_file;
+    static Fileenti current_file;
 
 
     Controller controller=new Controller();
@@ -93,13 +96,27 @@ public class Fm1Controller implements Initializable {
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    if(fileformat==""){
-                        controller.deleteDir(Controller.current_loc+"\\"+file.getName());
-                        List.getChildren().remove(B);
+                    if(fileformat.equals("")){
+                        try {
+                            System.out.println("here");
+                            controller.deleteDir(current_file.getPath()+"\\"+file.getName());
+                            fileserv.remove(file);
+                            List.getChildren().remove(B);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
-                    else if(fileformat.equals("")&&!fileformat.equals("Drive")){
-                        controller.deletefile(Controller.current_loc+"\\"+file.getName());
-                        List.getChildren().remove(B);
+                    else if(!fileformat.equals("")&&!fileformat.equals("Drive")){
+
+                        try {
+                            controller.deletefile(current_file.getPath()+"\\"+file.getName());
+                            fileserv.remove(file);
+                            List.getChildren().remove(B);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }
@@ -133,10 +150,11 @@ public class Fm1Controller implements Initializable {
                                 String lastname=B.getText();
                                 System.out.println(lastname);
                                 if(!newfilename.equals("")){
-                                    file.setName(newfilename);
+                                    file.setName(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
                                     try {
                                         fileserv.edit(file);
-                                        controller.renamefile(Controller.current_loc+"\\"+lastname,newfilename);
+                                        controller.renamefile(current_file.getPath()+"\\"+lastname,newfilename);
+                                        stage.close();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -156,9 +174,6 @@ public class Fm1Controller implements Initializable {
                             }
                         });
 
-
-
-
                         // Hide this current window (if this is what you want)
     //                    ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
                     }
@@ -177,8 +192,7 @@ public class Fm1Controller implements Initializable {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
                     if(mouseEvent.getClickCount()==2){
                         if(!fileformat.equals("")&&!fileformat.equals("Drive")){
-                            controller.runfile(Controller.current_loc+"\\"+B.getText());
-
+                            controller.runfile(current_file.getPath()+"\\"+B.getText());
                         }
                         else{
                             List.getChildren().clear();
@@ -251,12 +265,14 @@ public class Fm1Controller implements Initializable {
     }
     private void back(){
         try {
+
             List.getChildren().clear();
-            if(current_file.getIn_Folder()!=-1){
-                List<Fileenti>files=fileserv.open_Folder(current_file.getIn_Folder());
+//            current_file.getIn_Folder()!=-1
+            if(true){
+                System.out.println(current_file.getPath());
+                current_file=fileserv.open_Folder_id(current_file.getIn_Folder());
+                List<Fileenti>files=fileserv.open_Folder(current_file.getId());
 //            HashMap<String,String> f=controller.back_dir();
-                InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
-                Image image = new Image(stream);
                 for(Fileenti file:files){
                     String fileformat = "";
                     try {
@@ -289,19 +305,20 @@ public class Fm1Controller implements Initializable {
                     else{
                         SetIcon(fileimage,file);
                     }
-                    current_file=fileserv.open_Folder_id(current_file.getIn_Folder());
+
 
             }
 
 
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("fohsh1");
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("fohsh2");
         } catch (Exception e) {
-            e.printStackTrace();
+            OpenFolder(new Fileenti().setId(1));
+
         }
     }
     @Override
@@ -310,8 +327,9 @@ public class Fm1Controller implements Initializable {
         try {
             fileserv=Fileserv.getInstance();
             current_file=new Fileenti();
-            current_file.setId(0);
+            current_file.setId(1);
             current_file.setFormat("root");
+//            System.out.println(current_file);
 
             FolderStream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             pictureStream = new FileInputStream(getClass().getResource("icons8-gallery-96.png").getPath());
@@ -336,7 +354,63 @@ public class Fm1Controller implements Initializable {
         createfolder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("click");
+                try {
+                    Parent root;
+                    FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("createfile.fxml"));
+                    root = Fxmlloader.load();
+                    CreatefileController Createfile= Fxmlloader.getController();
+                    Stage stage = new Stage();
+                    stage.setTitle("create new file/folder");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                    Createfile.getCreateFile().setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            String filename=Createfile.getNameFiled().getText();
+                            Fileenti fileenti=new Fileenti();
+                            fileenti.setName(filename);
+                            fileenti.setIn_Folder(current_file.getId());
+                            fileenti.setPath(current_file.getPath()+"\\"+filename);
+                            Date date = new Date(System.currentTimeMillis());
+                            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+
+                            fileenti.setDatecreated(date);
+                            System.out.println(formatter.format(fileenti.getDatecreated()));
+                            if(filename.indexOf('.')!=-1){
+                                fileenti.setFormat(filename.substring(filename.lastIndexOf('.')+1,filename.length()));
+                                try {
+                                    controller.createfile(fileenti.getPath());
+                                    fileserv.save(fileenti);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else{
+                                fileenti.setFormat("");
+                                try {
+                                    controller.createfolder(fileenti.getPath());
+                                    fileserv.save(fileenti);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            }
+                            List.getChildren().clear();
+                            OpenFolder(current_file);
+                            stage.close();
+
+                        }
+                    });
+
+
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         });
 
