@@ -96,34 +96,34 @@ public class createtable{
 //        }
 
 
-//        Controller controller=new Controller();
-//        Fileserv service=Fileserv.getInstance();
-//        try{
-//            service.createtable();
+        Controller controller=new Controller();
+        Fileserv service=Fileserv.getInstance();
+        try{
+            service.createtable();
+
+        }
+        catch (Exception e){
+
+        }
+
+        Fileenti root=new Fileenti();
+        root.setFormat("root");
+        root.setPath("root");
+        root.setId(1);
+        root.setName("root");
+        root.setIn_Folder(-1);
+        service.save(root);
+        List<File> list=controller.scan_files("");
+        for(File file:list){
+            Fileenti fileent=new Fileenti();
+            fileent.setName(file.getName());
+            fileent.setIn_Folder(1);
+            fileent.setFormat("Drive");
+            fileent.setPath(file.getPath());
+            service.save(fileent);
+        }
 //
-//        }
-//        catch (Exception e){
 //
-//        }
-//
-//        Fileenti root=new Fileenti();
-//        root.setFormat("root");
-//        root.setPath("root");
-//        root.setId(0);
-//        root.setName("root");
-//        root.setIn_Folder(-1);
-//        service.save(root);
-//        List<File> list=controller.scan_files("");
-//        for(File file:list){
-//            Fileenti fileent=new Fileenti();
-//            fileent.setName(file.getName());
-//            fileent.setIn_Folder(0);
-//            fileent.setFormat("Drive");
-//            fileent.setPath(file.getPath());
-//            service.save(fileent);
-//        }
-////
-////
         }
 
 

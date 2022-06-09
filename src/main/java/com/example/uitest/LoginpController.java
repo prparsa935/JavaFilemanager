@@ -65,7 +65,12 @@ public class LoginpController implements Initializable {
         }
         try {
             UserEnt userEnt=new UserEnt().setId(0L).setUsername("username").setPassword("password").setEmail("user@gmail.com").setName("user");
-            UserService.getInstance().save(userEnt);
+            UserEnt userEntM=UserService.getInstance().authenticate(userEnt.getUsername(),userEnt.getPassword());
+            if(userEntM==null){
+                UserService.getInstance().save(userEnt);
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

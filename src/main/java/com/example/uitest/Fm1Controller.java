@@ -102,6 +102,8 @@ public class Fm1Controller implements Initializable {
                             controller.deleteDir(current_file.getPath()+"\\"+file.getName());
                             fileserv.remove(file);
                             List.getChildren().remove(B);
+
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -119,6 +121,25 @@ public class Fm1Controller implements Initializable {
                         }
 
                     }
+                    Fileenti Dir=current_file;
+                    try{
+                        Date date = new Date(System.currentTimeMillis());
+                        while(true){
+
+//                                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+                            Dir.setLastdatemodified(date);
+                            fileserv.edit(Dir);
+                            if(Dir.getIn_Folder()==1){
+                                break;
+                            }
+                            Dir=fileserv.open_Folder_id(Dir.getIn_Folder());
+
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             });
 
@@ -150,11 +171,26 @@ public class Fm1Controller implements Initializable {
                                 String lastname=B.getText();
                                 System.out.println(lastname);
                                 if(!newfilename.equals("")){
+                                    Date date = new Date(System.currentTimeMillis());
+                                    file.setLastdatemodified(date);
                                     file.setName(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
                                     try {
                                         fileserv.edit(file);
+                                        System.out.println(current_file.getPath()+"\\"+lastname);
+                                        System.out.println(newfilename);
                                         controller.renamefile(current_file.getPath()+"\\"+lastname,newfilename);
                                         stage.close();
+                                        Fileenti Dir=current_file;
+                                        while(true){
+//                                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+                                            Dir.setLastdatemodified(date);
+                                            fileserv.edit(Dir);
+                                            if(Dir.getIn_Folder()==1){
+                                                break;
+                                            }
+                                            Dir=fileserv.open_Folder_id(Dir.getIn_Folder());
+
+                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -350,7 +386,7 @@ public class Fm1Controller implements Initializable {
         }
         OpenFolder(current_file);
         // Create the context menu items
-        MenuItem createfolder = new MenuItem("Create Folder");
+        MenuItem createfolder = new MenuItem("Create File");
         createfolder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -375,7 +411,8 @@ public class Fm1Controller implements Initializable {
                             SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 
                             fileenti.setDatecreated(date);
-                            System.out.println(formatter.format(fileenti.getDatecreated()));
+                            fileenti.setLastdatemodified(date);
+//                            System.out.println(formatter.format(fileenti.getDatecreated()));
                             if(filename.indexOf('.')!=-1){
                                 fileenti.setFormat(filename.substring(filename.lastIndexOf('.')+1,filename.length()));
                                 try {

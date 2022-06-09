@@ -18,7 +18,9 @@ public class UserRepo implements AutoCloseable{
         connection.setAutoCommit (false);
     }
     public void createtabel() throws SQLException {
-        preparedStatement=connection.prepareStatement ("create table filemanageruser(id integer ,name varchar(45),username varchar(45) ,password varchar(45),email varchar(45))");
+        preparedStatement=connection.prepareStatement ("create table filemanageruser(id integer not null\n" +
+                "        constraint table_name_pk\n" +
+                "            primary key autoincrement,name varchar(45),username varchar(45) ,password varchar(45),email varchar(45))");
         preparedStatement.executeUpdate();
 
     }

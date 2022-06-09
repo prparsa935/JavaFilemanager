@@ -145,6 +145,11 @@ import java.util.List;
             }
             return fileentiList;
         }
+        public void droptable() throws Exception{
+            preparedStatement=connection.prepareStatement ("Drop Table files");
+            preparedStatement.executeUpdate();
+
+        }
 
 
 

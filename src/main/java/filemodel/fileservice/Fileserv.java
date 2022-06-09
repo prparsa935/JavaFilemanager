@@ -77,6 +77,13 @@ public class Fileserv {
         }
         return Fileenti;
     }
+    public void uninstall()throws Exception{
+        try (Filerepo filerepo=new Filerepo()){
+           filerepo.droptable();
+           filerepo.commit();
+        }
+
+    }
 
 
 }
