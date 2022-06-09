@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:controller="com.example.uitest.PropertiesController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="326.0" prefWidth="301.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="filename" layoutX="31.0" layoutY="192.0" prefHeight="17.0" prefWidth="66.0" text="filename:" />
+      <Label fx:id="format" layoutX="31.0" layoutY="213.0" text="format:" />
+      <Label fx:id="lastdatemodiafied" layoutX="31.0" layoutY="234.0" text="lastdatemodiafied:" />
+      <Label fx:id="datecreated" layoutX="31.0" layoutY="258.0" text="datecreated:" />
+      <Label fx:id="code" layoutX="31.0" layoutY="167.0" prefHeight="24.0" prefWidth="46.0" text="code:" />
+      <ImageView fx:id="fileimage" fitHeight="119.0" fitWidth="134.0" layoutX="151.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="path" layoutX="31.0" layoutY="282.0" text="path:" />
+   </children>
+</Pane>

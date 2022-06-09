@@ -53,7 +53,7 @@ public class Controller {
     List<File> list=scan_files("");
         for(File file:list){
             Fileenti fileent=new Fileenti();
-            fileent.setName(file.getName());
+            fileent.setName(file.getPath());
             fileent.setIn_Folder(1);
             fileent.setFormat("Drive");
             fileent.setPath(file.getPath());

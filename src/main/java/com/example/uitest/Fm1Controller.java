@@ -4,12 +4,10 @@ import Controller.Controller;
 import filemodel.fileentity.Fileenti;
 import filemodel.fileservice.Fileserv;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -21,21 +19,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.FileStore;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 public class Fm1Controller implements Initializable {
     Fileserv fileserv;
@@ -57,25 +46,9 @@ public class Fm1Controller implements Initializable {
     Image fileimage ;
     ContextMenu MainContextMenu;
     @FXML
-    private Button del;
-
-    @FXML
-    private Button edit;
-
-    @FXML
-    private Label fm;
-
-    @FXML
     private Pane pane;
-
-    @FXML
-    private TextField search;
-    @FXML
-    private FlowPane FlowPane;
     @FXML
     private FlowPane List;
-    @FXML
-    private ScrollPane ScBar;
     @FXML
     private Button BackButt;
     private void SetIcon(Image image,Fileenti file){
@@ -87,12 +60,38 @@ public class Fm1Controller implements Initializable {
         B.setGraphic(ImageView);
         List.getChildren().add(B);
         B.setContentDisplay(ContentDisplay.TOP);
-//                B.getStyleClass().add("bb");
         if(!fileformat.equals("Drive")){
-            MenuItem rename=new MenuItem("rename");
-            MenuItem delete=new MenuItem("delete");
+            MenuItem rename=new MenuItem("Rename");
+            MenuItem delete=new MenuItem("Delete");
+            MenuItem properties=new MenuItem("Properties");
             final ContextMenu CM=new ContextMenu();
-            CM.getItems().addAll(rename,delete);
+            CM.getItems().addAll(rename,delete,properties);
+            properties.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    try {
+                        Parent root;
+                        FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("properties.fxml"));
+                        root = Fxmlloader.load();
+                        PropertiesController propertiesController= Fxmlloader.getController();
+                        Stage stage = new Stage();
+                        stage.setTitle("Properties");
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                        propertiesController.getCode().setText("Code:"+file.getId());
+                        propertiesController.getDatecreated().setText("Createdate:"+file.getDatecreated());
+                        propertiesController.getFilename().setText("Filename:"+file.getName());
+                        propertiesController.getLastdatemodiafied().setText("Lastdatemodiafied:"+file.getLastdatemodified());
+                        propertiesController.getPath().setText("Path:"+file.getPath());
+                        propertiesController.getFileimage().setImage(image);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });
             delete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
@@ -102,16 +101,11 @@ public class Fm1Controller implements Initializable {
                             controller.deleteDir(current_file.getPath()+"\\"+file.getName());
                             fileserv.remove(file);
                             List.getChildren().remove(B);
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-
                     }
                     else if(!fileformat.equals("")&&!fileformat.equals("Drive")){
-
                         try {
                             controller.deletefile(current_file.getPath()+"\\"+file.getName());
                             fileserv.remove(file);
@@ -119,7 +113,6 @@ public class Fm1Controller implements Initializable {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }
                     Fileenti Dir=current_file;
                     try{
@@ -210,8 +203,6 @@ public class Fm1Controller implements Initializable {
                             }
                         });
 
-                        // Hide this current window (if this is what you want)
-    //                    ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
                     }
                     catch (IOException e) {
                         e.printStackTrace();
@@ -242,16 +233,6 @@ public class Fm1Controller implements Initializable {
         });
 
     }
-    private String getfileformat(String filename){
-        try {
-            return filename.substring(filename.lastIndexOf('.')+1,filename.length());
-        }catch (Exception e){
-
-        }
-        return null;
-
-    }
-
 
     private void OpenFolder(Fileenti folder){
         try {
@@ -303,31 +284,22 @@ public class Fm1Controller implements Initializable {
         try {
 
             List.getChildren().clear();
-//            current_file.getIn_Folder()!=-1
             if(true){
                 System.out.println(current_file.getPath());
                 current_file=fileserv.open_Folder_id(current_file.getIn_Folder());
                 List<Fileenti>files=fileserv.open_Folder(current_file.getId());
-//            HashMap<String,String> f=controller.back_dir();
                 for(Fileenti file:files){
                     String fileformat = "";
                     try {
                         fileformat=file.getFormat();
-
                     }
-                    catch (Exception e){
-
-
-                    }
+                    catch (Exception e){}
 
                     if (fileformat.equals("")||fileformat.equals("Drive")){
                         SetIcon(Folderimage,file);
-
-
                     }
                     else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
                         SetIcon(pictureimage,file);
-
                     }
                     else if(fileformat.equals("exe")||fileformat.equals("bat")){
                         SetIcon(appimage,file);
@@ -365,7 +337,7 @@ public class Fm1Controller implements Initializable {
             current_file=new Fileenti();
             current_file.setId(1);
             current_file.setFormat("root");
-//            System.out.println(current_file);
+//            controller.setupdrives();
 
             FolderStream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
             pictureStream = new FileInputStream(getClass().getResource("icons8-gallery-96.png").getPath());
@@ -383,9 +355,10 @@ public class Fm1Controller implements Initializable {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         OpenFolder(current_file);
-        // Create the context menu items
         MenuItem createfolder = new MenuItem("Create File");
         createfolder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -451,8 +424,6 @@ public class Fm1Controller implements Initializable {
             }
         });
 
-
-        // Create a context (i.e., popup) menu that shows edit options.
         MainContextMenu = new ContextMenu(createfolder);
         pane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
@@ -474,42 +445,6 @@ public class Fm1Controller implements Initializable {
                 back();
             }
         });
-
-
-//
-//        try {
-//            HashMap<String,String> f=controller.scan_files(Controller.current_loc);
-//            InputStream stream = new FileInputStream(getClass().getResource("icons8-folder-96.png").getPath());
-//            Image image = new Image(stream);
-//            for(Map.Entry<String, String> set:f.entrySet()){
-//                ImageView ImageView=new ImageView();
-//                ImageView.setImage(image);
-//                Button B=new Button();
-//                B.setText(set.getKey());
-//                B.setGraphic(ImageView);
-//                List.getChildren().add(B);
-////                B.setStyle("-fx-background-color: #f4f4f4; ");
-//                B.setContentDisplay(ContentDisplay.TOP);
-//                B.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//                    @Override
-//                    public void handle(MouseEvent mouseEvent) {
-//                        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-//                            if(mouseEvent.getClickCount()==2){
-//                                List.getChildren().clear();
-//                                OpenFolder(B.getText());
-//                            }
-//
-//                        }
-//
-//                    }
-//                });
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
     }
 }
