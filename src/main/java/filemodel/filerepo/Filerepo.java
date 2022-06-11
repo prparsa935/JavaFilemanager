@@ -50,21 +50,22 @@ import java.util.List;
             preparedStatement.executeUpdate ();
         }
 
-        public List<Fileenti> search(String name) throws Exception{
-            preparedStatement=connection.prepareStatement ("SELECT * FROM files where name=?");
-            preparedStatement.setString(1,name);
+        public List<Fileenti> search(String name,Long id) throws Exception{
+            preparedStatement=connection.prepareStatement ("SELECT * FROM files where name LIKE ? and in_folder=?");
+            preparedStatement.setString(1,'%'+name+'%');
+            preparedStatement.setLong(2,id);
             ResultSet resultSet=preparedStatement.executeQuery ();
             List<Fileenti> fileentiList=new ArrayList <> ();
             while (resultSet.next ()){
-               Fileenti fileenti=new Fileenti();
-               fileenti.setName (resultSet.getString ("name"));
+                Fileenti fileenti=new Fileenti();
+                fileenti.setName (resultSet.getString ("name"));
                 fileenti.setPath(resultSet.getString ("path"));
                 fileenti.setLastdatemodified (resultSet.getDate ("lastdatemodified"));
-                fileenti.setDatecreated(resultSet.getDate("datecreated"));
+                fileenti.setDatecreated(resultSet.getDate("createddate"));
                 fileenti.setId(resultSet.getLong("id"));
                 fileenti.setIn_Folder(resultSet.getLong("in_folder"));
                 fileenti.setFormat(resultSet.getString("fileformat"));
-               fileentiList.add(fileenti);
+                fileentiList.add(fileenti);
             }
             return fileentiList;
         }

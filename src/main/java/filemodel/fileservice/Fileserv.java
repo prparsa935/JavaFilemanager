@@ -42,10 +42,10 @@ public class Fileserv {
             filerepo.commit();
         }
     }
-    public List<Fileenti> search(String name) throws Exception{
+    public List<Fileenti> search(String name,Long id) throws Exception{
         List<Fileenti> Fileenti;
         try (Filerepo filerepo=new Filerepo()){
-            Fileenti=filerepo.search(name);
+            Fileenti=filerepo.search(name,id);
         }
         return Fileenti;
     }

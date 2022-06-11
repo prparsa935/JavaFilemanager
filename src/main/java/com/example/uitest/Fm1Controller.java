@@ -13,12 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.io.*;
 import java.net.URL;
 import java.sql.Date;
@@ -29,7 +29,6 @@ import java.util.ResourceBundle;
 public class Fm1Controller implements Initializable {
     Fileserv fileserv;
     static Fileenti current_file;
-
 
     Controller controller=new Controller();
     InputStream FolderStream;
@@ -45,6 +44,8 @@ public class Fm1Controller implements Initializable {
     Image pdfimage;
     Image fileimage ;
     ContextMenu MainContextMenu;
+    @FXML
+    private TextField search;
     @FXML
     private Pane pane;
     @FXML
@@ -63,7 +64,7 @@ public class Fm1Controller implements Initializable {
         if(!fileformat.equals("Drive")){
             MenuItem rename=new MenuItem("Rename");
             MenuItem delete=new MenuItem("Delete");
-            MenuItem properties=new MenuItem("Properties");
+            MenuItem properties=new MenuItem("Get Info");
             final ContextMenu CM=new ContextMenu();
             CM.getItems().addAll(rename,delete,properties);
             properties.setOnAction(new EventHandler<ActionEvent>() {
@@ -74,15 +75,17 @@ public class Fm1Controller implements Initializable {
                         FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("properties.fxml"));
                         root = Fxmlloader.load();
                         PropertiesController propertiesController= Fxmlloader.getController();
-                        Stage stage = new Stage();
+                        Stage stage=new Stage();
                         stage.setTitle("Properties");
                         stage.setScene(new Scene(root));
+                        stage.getScene().getStylesheets().add(pane.getScene().getStylesheets().get(0));
                         stage.show();
-                        propertiesController.getCode().setText("Code:"+file.getId());
-                        propertiesController.getDatecreated().setText("Createdate:"+file.getDatecreated());
-                        propertiesController.getFilename().setText("Filename:"+file.getName());
-                        propertiesController.getLastdatemodiafied().setText("Lastdatemodiafied:"+file.getLastdatemodified());
-                        propertiesController.getPath().setText("Path:"+file.getPath());
+                        propertiesController.getCode().setText("Code: "+file.getId());
+                        propertiesController.getDatecreated().setText("Createdate: "+file.getDatecreated());
+                        propertiesController.getFilename().setText("Filename: "+file.getName());
+                        propertiesController.getLastdatemodiafied().setText("Lastdatemodiafied: "+file.getLastdatemodified());
+                        propertiesController.getPath().setText("Path: "+file.getPath());
+                        propertiesController.getFormat().setText("Format: "+file.getFormat());
                         propertiesController.getFileimage().setImage(image);
 
                     } catch (IOException e) {
@@ -97,7 +100,6 @@ public class Fm1Controller implements Initializable {
                 public void handle(ActionEvent actionEvent) {
                     if(fileformat.equals("")){
                         try {
-                            System.out.println("here");
                             controller.deleteDir(current_file.getPath()+"\\"+file.getName());
                             fileserv.remove(file);
                             List.getChildren().remove(B);
@@ -141,12 +143,15 @@ public class Fm1Controller implements Initializable {
                 public void handle(ActionEvent actionEvent) {
                     try {
                         Parent root;
-                        FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("renamefield.fxml"));
+                        final FXMLLoader Fxmlloader=new FXMLLoader(getClass().getResource("renamefield.fxml"));
                         root = Fxmlloader.load();
                         RenamefieldController renameC= Fxmlloader.getController();
                         String presentname=B.getText();
-                        if(!fileformat.equals("")&&!fileformat.equals("Drive"))
-                            renameC.getNewnamefield().setText(presentname.substring(0,presentname.lastIndexOf('.')));
+                        if(!fileformat.equals("")&&!fileformat.equals("Drive")) {
+
+                            renameC.getNewnamefield().setText(presentname.substring(0, presentname.lastIndexOf('.')));
+
+                        }
                         else if(fileformat.equals("")){
                             renameC.getNewnamefield().setText(presentname);
                         }
@@ -155,6 +160,7 @@ public class Fm1Controller implements Initializable {
                         Stage stage = new Stage();
                         stage.setTitle("rename");
                         stage.setScene(new Scene(root));
+                        stage.getScene().getStylesheets().add(pane.getScene().getStylesheets().get(0));
                         stage.show();
                         renameC.getSave().setOnAction(new EventHandler<ActionEvent>() {
                             @Override
@@ -166,7 +172,12 @@ public class Fm1Controller implements Initializable {
                                 if(!newfilename.equals("")){
                                     Date date = new Date(System.currentTimeMillis());
                                     file.setLastdatemodified(date);
-                                    file.setName(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
+                                    System.out.println("here");
+                                    if(lastname.lastIndexOf(".")==-1)
+                                        file.setName(newfilename);
+                                    else
+                                        file.setName(newfilename+lastname.substring(lastname.lastIndexOf("."),lastname.length()));
+                                    System.out.println("here");
                                     try {
                                         fileserv.edit(file);
                                         System.out.println(current_file.getPath()+"\\"+lastname);
@@ -333,6 +344,7 @@ public class Fm1Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
+
             fileserv=Fileserv.getInstance();
             current_file=new Fileenti();
             current_file.setId(1);
@@ -360,6 +372,24 @@ public class Fm1Controller implements Initializable {
         }
         OpenFolder(current_file);
         MenuItem createfolder = new MenuItem("Create File");
+        MenuItem Darkmode = new MenuItem("Activate Darkmode");
+        MenuItem lightmode = new MenuItem("Activate lightmode");
+        lightmode.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                pane.getScene().getStylesheets().clear();
+                pane.getScene().getStylesheets().add(getClass().getResource("Fm1Style.css").toExternalForm());
+            }
+        });
+        Darkmode.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                pane.getScene().getStylesheets().clear();
+                pane.getScene().getStylesheets().add(getClass().getResource("Fm1StyleDmode.css").toExternalForm());
+                System.out.println("hello");
+            }
+        });
         createfolder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -371,6 +401,7 @@ public class Fm1Controller implements Initializable {
                     Stage stage = new Stage();
                     stage.setTitle("create new file/folder");
                     stage.setScene(new Scene(root));
+                    stage.getScene().getStylesheets().add(pane.getScene().getStylesheets().get(0));
                     stage.show();
                     Createfile.getCreateFile().setOnAction(new EventHandler<ActionEvent>() {
                         @Override
@@ -424,7 +455,7 @@ public class Fm1Controller implements Initializable {
             }
         });
 
-        MainContextMenu = new ContextMenu(createfolder);
+        MainContextMenu = new ContextMenu(createfolder,Darkmode,lightmode);
         pane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent contextMenuEvent) {
@@ -445,6 +476,51 @@ public class Fm1Controller implements Initializable {
                 back();
             }
         });
+        search.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(keyEvent.getCode()== KeyCode.ENTER){
+                    try {
+                        List<Fileenti> searchedfiles=fileserv.search(search.getText().toLowerCase(),current_file.getId());
+                        List.getChildren().clear();
+                        for(Fileenti file:searchedfiles){
+                            System.out.println(file.getPath());
+                            String fileformat = "";
+                            try {
+                                fileformat=file.getFormat();
+                            }
+                            catch (Exception e){}
+
+
+                            if (fileformat.equals("")||fileformat.equals("Drive")){
+                                SetIcon(Folderimage,file);
+                            }
+                            else if(fileformat.equals("jpeg")||fileformat.equals("gif")||fileformat.equals("tiff")||fileformat.equals("jpg")){
+                                SetIcon(pictureimage,file);
+                            }
+                            else if(fileformat.equals("exe")||fileformat.equals("bat")){
+                                SetIcon(appimage,file);
+                            }
+                            else if(fileformat.equals("mp4")||fileformat.equals("mov")||fileformat.equals("wmv")||fileformat.equals("avi")){
+                                SetIcon(videoimage,file);
+                            }
+                            else if(fileformat.equals("pdf")){
+                                SetIcon(pdfimage,file);
+                            }
+                            else{
+                                SetIcon(fileimage,file);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+
+
 
     }
 }

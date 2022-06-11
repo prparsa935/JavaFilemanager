@@ -8,7 +8,7 @@
     -fx-pref-width: 100px;
     -fx-pref-height: 80px;
     /*-fx-background-color: -fx-shadow-highlight-color, #007bff;*/
-    -fx-background-color: -fx-shadow-highlight-color, #c1cbd8;
+    -fx-background-color: -fx-shadow-highlight-color, #9aa4ad;
     -fx-text-overrun: hide;
 
 }
@@ -16,7 +16,7 @@
     -fx-pref-width: 100px;
     -fx-pref-height: 80px;
     /*-fx-background-color: -fx-shadow-highlight-color, #007bff;*/
-    -fx-background-color: -fx-shadow-highlight-color, #9aa4ad;
+    -fx-background-color: -fx-shadow-highlight-color, #c1cbd8;
 
 }
 
