@@ -27,8 +27,10 @@ public class Fileserv {
         try (Filerepo filerepo=new Filerepo()) {
             filerepo.insert(fileenti);
             filerepo.commit ();
+
         }
     }
+
     public void edit (Fileenti fileenti) throws Exception{
         try (Filerepo filerepo=new Filerepo()){
             filerepo.update (fileenti);
@@ -84,7 +86,6 @@ public class Fileserv {
         }
 
     }
-
 
 }
 
