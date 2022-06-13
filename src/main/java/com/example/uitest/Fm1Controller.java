@@ -17,7 +17,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
 
 import java.io.*;
 import java.net.URL;

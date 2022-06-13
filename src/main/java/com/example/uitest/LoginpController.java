@@ -96,6 +96,7 @@ public class LoginpController implements Initializable {
                             Stage stage = new Stage();
                             stage.setTitle("File Manager");
                             stage.setScene(new Scene(root));
+                            stage.getScene().getStylesheets().add(getClass().getResource("Fm1Style.css").toExternalForm());
                             stage.show();
                             // Hide this current window (if this is what you want)
                             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
