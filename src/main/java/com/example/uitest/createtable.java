@@ -24,7 +24,7 @@ public class createtable{
                 if(file.isFile()){
                     try{
                         System.out.println(filename);
-                        fileenti.setFormat(filename.substring(filename.lastIndexOf('.'),filename.length()-1));
+                        fileenti.setFormat(filename.substring(filename.lastIndexOf('.'),filename.length()));
 
                     }
                     catch (Exception e){}
